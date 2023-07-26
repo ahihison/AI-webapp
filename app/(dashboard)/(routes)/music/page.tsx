@@ -1,40 +1,35 @@
 "use client";
 import Heading from "@/components/heading";
-import * as z from "zod";
-import { MessageSquare } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { formSchema } from "./constants";
-import { zodResolver } from "@hookform/resolvers/zod";
+import Loader from "@/components/loader";
+import { Button } from "@/components/ui/button";
+import Empty from "@/components/ui/empty";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { Music } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { ChatCompletionRequestMessage } from "openai";
-import Empty from "@/components/ui/empty";
-import Loader from "@/components/loader";
-const Conversation = () => {
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { formSchema } from "./constants";
+const MusicPage = () => {
   const router = useRouter();
+  const [music, setMusic] = useState<string>();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       prompt: "",
     },
   });
-  const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
+
   const isLoading = form.formState.isSubmitting;
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const userMessage: ChatCompletionRequestMessage = {
-        role: "user",
-        content: values.prompt,
-      };
-      const newMessages = [...messages, userMessage];
-      const response = await axios.post("/api/conversation", {
-        messages: newMessages,
-      });
-      setMessages((current) => [...current, userMessage, response.data]);
+      setMusic(undefined);
+      const response = await axios.post("/api/music", values);
+      setMusic(response.data.audio);
       form.reset();
     } catch (e: any) {
       console.log(e);
@@ -45,11 +40,11 @@ const Conversation = () => {
   return (
     <div>
       <Heading
-        title="Conversation"
-        icon={MessageSquare}
-        description="Our most advanced conversation model."
-        iconColor="text-violet-500"
-        bgColor="bg-violet-500/10"
+        title="Music Generation"
+        icon={Music}
+        description="Turn your prompt into music."
+        iconColor="text-emerald-500"
+        bgColor="bg-emerald-500/10"
       />
       <div className="px-4 lg:px-8">
         <div>
@@ -66,7 +61,7 @@ const Conversation = () => {
                       <Input
                         className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent select-none "
                         disabled={isLoading}
-                        placeholder="How do I calculate the radius of a circle?"
+                        placeholder="Piano solo"
                         {...field}
                       />
                     </FormControl>
@@ -88,10 +83,15 @@ const Conversation = () => {
               <Loader />
             </div>
           )}
-          {messages.length === 0 && !isLoading && (
+          {!music && !isLoading && (
             <div>
-              <Empty label="No conversation started" />
+              <Empty label="No music generated" />
             </div>
+          )}
+          {music && (
+            <audio controls className="w-full mt-8">
+              <source src={music} />
+            </audio>
           )}
         </div>
       </div>
@@ -99,4 +99,4 @@ const Conversation = () => {
   );
 };
 
-export default Conversation;
+export default MusicPage;

@@ -1,7 +1,7 @@
 "use client";
 import Heading from "@/components/heading";
 import * as z from "zod";
-import { MessageSquare } from "lucide-react";
+import { Code, MessageSquare } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { formSchema } from "./constants";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,11 +45,11 @@ const Conversation = () => {
   return (
     <div>
       <Heading
-        title="Conversation"
-        icon={MessageSquare}
+        title="Code Generation"
+        icon={Code}
         description="Our most advanced conversation model."
-        iconColor="text-violet-500"
-        bgColor="bg-violet-500/10"
+        iconColor="text-green-500"
+        bgColor="bg-green-500/10"
       />
       <div className="px-4 lg:px-8">
         <div>
@@ -66,7 +66,7 @@ const Conversation = () => {
                       <Input
                         className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent select-none "
                         disabled={isLoading}
-                        placeholder="How do I calculate the radius of a circle?"
+                        placeholder="How can I build a website?"
                         {...field}
                       />
                     </FormControl>

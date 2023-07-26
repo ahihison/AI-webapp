@@ -1,40 +1,34 @@
 "use client";
 import Heading from "@/components/heading";
-import * as z from "zod";
-import { MessageSquare } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { formSchema } from "./constants";
-import { zodResolver } from "@hookform/resolvers/zod";
+import Loader from "@/components/loader";
+import { Button } from "@/components/ui/button";
+import Empty from "@/components/ui/empty";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { Video } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ChatCompletionRequestMessage } from "openai";
-import Empty from "@/components/ui/empty";
-import Loader from "@/components/loader";
-const Conversation = () => {
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { formSchema } from "./constants";
+const VideoPage = () => {
   const router = useRouter();
+  const [video, setVideo] = useState<string>();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       prompt: "",
     },
   });
-  const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
+
   const isLoading = form.formState.isSubmitting;
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const userMessage: ChatCompletionRequestMessage = {
-        role: "user",
-        content: values.prompt,
-      };
-      const newMessages = [...messages, userMessage];
-      const response = await axios.post("/api/conversation", {
-        messages: newMessages,
-      });
-      setMessages((current) => [...current, userMessage, response.data]);
+      setVideo(undefined);
+      const response = await axios.post("/api/video", values);
+      setVideo(response.data[0]);
       form.reset();
     } catch (e: any) {
       console.log(e);
@@ -45,11 +39,11 @@ const Conversation = () => {
   return (
     <div>
       <Heading
-        title="Conversation"
-        icon={MessageSquare}
-        description="Our most advanced conversation model."
-        iconColor="text-violet-500"
-        bgColor="bg-violet-500/10"
+        title="Video Generation"
+        icon={Video}
+        description="Turn your prompt into video."
+        iconColor="text-orange-700"
+        bgColor="bg-orange-700/10"
       />
       <div className="px-4 lg:px-8">
         <div>
@@ -66,7 +60,7 @@ const Conversation = () => {
                       <Input
                         className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent select-none "
                         disabled={isLoading}
-                        placeholder="How do I calculate the radius of a circle?"
+                        placeholder="Clown fish swimming around a coral reef"
                         {...field}
                       />
                     </FormControl>
@@ -88,10 +82,18 @@ const Conversation = () => {
               <Loader />
             </div>
           )}
-          {messages.length === 0 && !isLoading && (
+          {!video && !isLoading && (
             <div>
-              <Empty label="No conversation started" />
+              <Empty label="No video generated" />
             </div>
+          )}
+          {video && (
+            <video
+              className="w-full aspect-video mt-8 rounded-lg border bg-black  "
+              controls
+            >
+              <source src={video} />
+            </video>
           )}
         </div>
       </div>
@@ -99,4 +101,4 @@ const Conversation = () => {
   );
 };
 
-export default Conversation;
+export default VideoPage;
