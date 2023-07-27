@@ -14,8 +14,11 @@ import { Montserrat } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import FreeCounter from "./free-counter";
 const montserrat = Montserrat({ weight: "600", subsets: ["latin"] });
-
+interface SidebarProps {
+  limitCount: number;
+}
 const routes = [
   {
     label: "Dashboard",
@@ -59,7 +62,7 @@ const routes = [
     href: "/settings",
   },
 ];
-const Sidebar = () => {
+const Sidebar = ({ limitCount = 0 }: SidebarProps) => {
   let pathname = usePathname();
   return (
     <div className="flex flex-col  text-white py-4 h-full space-y-4 bg-[#111827]">
@@ -92,6 +95,7 @@ const Sidebar = () => {
           ))}
         </div>
       </div>
+      <FreeCounter apiLimitCount={limitCount} />
     </div>
   );
 };

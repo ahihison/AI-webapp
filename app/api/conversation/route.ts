@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import { Configuration, OpenAIApi } from "openai";
-import { increaseApiLimit, checkApiLimit } from "@/lib/api-litmit";
+import { increaseApiLimit, checkApiLimit } from "@/lib/api-limit";
 const configuration = new Configuration({
   organization: "org-ZaSTovcgJeJOfLyRDw8FA3X9",
   apiKey: process.env.OPENAI_API_KEY,
