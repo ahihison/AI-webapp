@@ -14,7 +14,9 @@ import { useState } from "react";
 import { ChatCompletionRequestMessage } from "openai";
 import Empty from "@/components/ui/empty";
 import Loader from "@/components/loader";
+import { useProModal } from "@/hooks/use-pro-modal";
 const Conversation = () => {
+  const proModal = useProModal();
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -37,7 +39,9 @@ const Conversation = () => {
       setMessages((current) => [...current, userMessage, response.data]);
       form.reset();
     } catch (e: any) {
-      console.log(e);
+      if (e?.response?.status === 403) {
+        proModal.onOpen();
+      }
     } finally {
       router.refresh();
     }
