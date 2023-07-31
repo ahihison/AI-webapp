@@ -7,6 +7,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useProModal } from "@/hooks/use-pro-modal";
+import { cn } from "@/lib/utils";
+import axios from "axios";
 import {
   Check,
   Code,
@@ -16,10 +18,10 @@ import {
   VideoIcon,
   Zap,
 } from "lucide-react";
+import { useState } from "react";
 import { Badge } from "./ui/badge";
-import { Card } from "./ui/card";
-import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
+import { Card } from "./ui/card";
 const tools = [
   {
     label: "Conversation",
@@ -54,6 +56,18 @@ const tools = [
 ];
 const ProModal = () => {
   const proModal = useProModal();
+  const [isLoading, setIsLoading] = useState(false);
+  const onSubscribe = async () => {
+    try {
+      setIsLoading(true);
+      const respone = await axios.get("/api/stripe");
+      window.location.href = respone.data.url;
+    } catch (e) {
+      console.log(e, "STRIPE_CLIENT_ERROR");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <Dialog open={proModal.isOpen} onOpenChange={proModal.onClose}>
       <DialogContent>
@@ -84,7 +98,13 @@ const ProModal = () => {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button size="lg" variant="premium" className="w-full">
+          <Button
+            disabled={isLoading}
+            size="lg"
+            variant="premium"
+            className="w-full"
+            onClick={onSubscribe}
+          >
             Upgrade
             <Zap className="w-4 h-4 ml-2 fill-white" />
           </Button>

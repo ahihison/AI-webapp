@@ -18,6 +18,7 @@ import FreeCounter from "./free-counter";
 const montserrat = Montserrat({ weight: "600", subsets: ["latin"] });
 interface SidebarProps {
   limitCount: number;
+  isPro: boolean;
 }
 const routes = [
   {
@@ -62,7 +63,7 @@ const routes = [
     href: "/settings",
   },
 ];
-const Sidebar = ({ limitCount = 0 }: SidebarProps) => {
+const Sidebar = ({ limitCount = 0, isPro = false }: SidebarProps) => {
   let pathname = usePathname();
   return (
     <div className="flex flex-col  text-white py-4 h-full space-y-4 bg-[#111827]">
@@ -95,7 +96,7 @@ const Sidebar = ({ limitCount = 0 }: SidebarProps) => {
           ))}
         </div>
       </div>
-      <FreeCounter apiLimitCount={limitCount} />
+      <FreeCounter apiLimitCount={limitCount} isPro={isPro} />
     </div>
   );
 };

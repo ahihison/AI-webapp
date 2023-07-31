@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
+import { toast } from "react-hot-toast";
 import Empty from "@/components/ui/empty";
 import Loader from "@/components/loader";
 import {
@@ -49,6 +49,8 @@ const Conversation = () => {
     } catch (e: any) {
       if (e?.response?.status === 403) {
         proModal.onOpen();
+      } else {
+        toast.error("Something went wrong");
       }
     } finally {
       router.refresh();

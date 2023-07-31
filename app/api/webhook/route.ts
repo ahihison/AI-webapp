@@ -38,6 +38,21 @@ export async function POST(req: Request) {
       },
     });
     if ((event.type = "invoice.payment_succeeded")) {
+      const subscription = await stripe.subscriptions.retrieve(
+        session.subscription as string
+      );
+      await prismadb.userSubscriton.update({
+        where: {
+          stripeSubscriptionId: subscription.id,
+        },
+        data: {
+          stripePriceId: subscription.items.data[0].price.id,
+          stripeCurrentPeriodEnd: new Date(
+            subscription.current_period_end * 1000
+          ),
+        },
+      });
     }
   }
+  return new Response(null, { status: 200 });
 }
