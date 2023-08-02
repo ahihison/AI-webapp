@@ -6,7 +6,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { CrispProvider } from "@/components/crisp-provider";
 const inter = Inter({ subsets: ["latin"] });
-
+import { ThemeProvider } from "@/components/theme-provider";
 export const metadata: Metadata = {
   title: "Genius",
   description: "AI Platform",
@@ -19,12 +19,14 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <CrispProvider />
         <body className={inter.className}>
           <ModalProvider />
           <ToasterProvider />
-          {children}
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
