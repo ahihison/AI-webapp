@@ -69,7 +69,7 @@ const Dashboard = () => {
               router.push(tool.href);
             }}
             key={tool.href}
-            className="p-4 border-black/5 flex items-center justify-between hover:shadow-md transition cursor-pointer"
+            className="p-4 dark:border-white/50 border-black/5 flex items-center justify-between hover:shadow-md dark:hover:opacity-75 transition cursor-pointer"
           >
             <div className="flex items-center gap-x-4">
               <div className={cn("p-2 w-fit rounded-md", tool.bgColor)}>

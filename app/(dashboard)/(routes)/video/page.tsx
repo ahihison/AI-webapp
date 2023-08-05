@@ -65,7 +65,7 @@ const VideoPage = () => {
                   <FormItem className="col-span-12 lg:col-span-10">
                     <FormControl className="m-0 p-0">
                       <Input
-                        className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent select-none "
+                        className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent select-none  "
                         disabled={isLoading}
                         placeholder="Clown fish swimming around a coral reef"
                         {...field}

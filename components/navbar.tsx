@@ -10,9 +10,9 @@ const Navbar = async () => {
   return (
     <div className="flex items-center p-4">
       <SidebarMobile apiLimitCount={apiLimitCount} isPro={isPro} />
-      <div className="flex justify-end w-full">
-        <UserButton afterSignOutUrl="/" />
+      <div className="flex justify-end items-center w-full gap-4">
         <ModeToggle />
+        <UserButton afterSignOutUrl="/" />
       </div>
     </div>
   );

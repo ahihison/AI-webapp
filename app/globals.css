@@ -39,6 +39,9 @@ body,
     --ring: 215 20.2% 65.1%;
 
     --radius: 0.5rem;
+
+    --autofill-bg-light: white;
+    --autofill-bg-dark: #020817;
   }
 
   .dark {
@@ -76,8 +79,9 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-box-shadow: 0 0 0 30px var(--autofill-bg) inset !important;
 }
+
 @layer base {
   * {
     @apply border-border;
