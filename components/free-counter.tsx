@@ -20,7 +20,7 @@ const FreeCounter = ({
   const proModal = useProModal();
   useEffect(() => {
     setMounted(true);
-  });
+  }, []);
   if (!mounted) return null;
   if (isPro) return null;
   return (

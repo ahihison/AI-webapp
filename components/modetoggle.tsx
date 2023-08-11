@@ -16,13 +16,15 @@ import { useEffect, useState } from "react";
 export function ModeToggle() {
   const { setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const localStorageTheme = localStorage.getItem("theme");
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
-    let isDarkMode = localStorage.getItem("theme") === "dark";
-    if (!isDarkMode && localStorage.getItem("theme") == "system") {
+    let isDarkMode = localStorageTheme === "dark";
+    if (!isDarkMode && localStorageTheme === "system") {
       const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
       isDarkMode = darkModeQuery.matches;
     }
@@ -31,7 +33,7 @@ export function ModeToggle() {
       "--autofill-bg",
       isDarkMode ? "var(--autofill-bg-dark)" : "var(--autofill-bg-light)"
     );
-  }, [localStorage.getItem("theme")]);
+  }, [localStorageTheme]);
 
   if (!mounted) return <></>;
   // write rest of your code
